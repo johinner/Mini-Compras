@@ -29,12 +29,23 @@ class UI{
         if(element.name === 'delete'){
             //ver su contenedor padre 
             element.parentElement.parentElement.parentElement.remove()
-            
+            this.showMessage('Product Deleted Successfully', 'info')
         }
     }
 
-    showMessage(){
+    showMessage(message, cssClass){
+        const div = document.createElement('div');
+        div.className = `alert alert-${cssClass} mt-3`;
+        //crear texto dende del div
+        div.appendChild(document.createTextNode(message));
+        
+        const container =  document.querySelector('.container');
+        const app = document.getElementById('App');
+        container.insertBefore(div, app);
 
+        setTimeout(function(){
+            document.querySelector('.alert').remove()
+        }, 3000)
     }
 }
 
@@ -47,9 +58,14 @@ form.addEventListener('submit', function(e){
     const year = e.path[0][2].value;
     
     const product = new Product(name, price, year);
-
     const ui = new UI();
+
+    if (name === '' || price === '' || year === ''){
+        return ui.showMessage('Complete Fields Please', 'danger')
+    }
+    
     ui.addProduct(product);
+    ui.showMessage("Product added Successfully", "success")
     
 })
 
